@@ -120,8 +120,9 @@ VolumeCalc = {
 		this.styles = rules;
 	},
 	init: function(){
-
+		console.log('init');
 		if( this.isPDP() ) {
+			console.log('isPDP');
 			this.buildStyles();
 			this.buildFormAndContainers();
 			var styleTag = document.createElement('style');
