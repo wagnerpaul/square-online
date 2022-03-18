@@ -121,7 +121,7 @@ VolumeCalc = {
 	},
 	init: function(){
 		console.log('init');
-		if( this.isPDP() ) {
+		//if( this.isPDP() ) {
 			console.log('isPDP');
 			this.buildStyles();
 			this.buildFormAndContainers();
@@ -131,12 +131,13 @@ VolumeCalc = {
 
 			var footer = document.querySelector('[data-block-purpose^="footer"]')
 			footer.prepend(this.formAndContainers);
-		}
+		//}
 
 	}
 }
 
-window.onload = function() {
    VolumeCalc.init();
-}; 
+
+
+
 
