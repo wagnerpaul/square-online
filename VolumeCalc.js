@@ -1,42 +1,51 @@
 var VolumeCalc = VolumeCalc || {};
+
 VolumeCalc = {
 
 	isPDP: function(){ 
 		var NodeListLength = document.querySelectorAll('[data-block-purpose^="product-detail"]').length;
 		return Boolean(NodeListLength);
 	},
-
+	opening: "<h1>Construction Materials Calculator</h1><p>This calculator will round up in 1/2 cubic yard increments:</p>",
 	buildForm: function(){
 		this.form = document.createElement("form");
 		this.form.setAttribute("name", "volcalc");
 		this.form.setAttribute("class", "form");
 
-		var dimensions = ['length','width', 'depth'];
+		var dimensions = [
+				{name: 'Length', unit: 'Ft'},
+				{name: 'Width', unit: 'Ft'},
+				{name: 'Depth', unit: 'In'}
+			];
 
 		for (var i = 0; i < dimensions.length; i++) {
+
 			var wrapper = document.createElement("div");
-				wrapper.setAttribute("class", "input-group");
+				wrapper.setAttribute("class", "input-group col col-6  offset-3");
 
 			var label = document.createElement("label");
 				label.setAttribute("class", "field_name");
-				label.innerHTML = "Enter " + dimensions[i] + " (Ft)";
+				label.innerHTML = "Enter " + dimensions[i].name + " (" + dimensions[i].unit + ")";
 
 			
 			var input = document.createElement("input");
 				input.setAttribute("class", "field");
 				input.setAttribute("type", "text");
-				input.setAttribute("name", dimensions[i]);
-				input.setAttribute("aria-label", dimensions[i]);
-				input.setAttribute("placeholder", dimensions[i]);
+				input.setAttribute("name", dimensions[i].name.toLowerCase());
+				input.setAttribute("aria-label", dimensions[i].name.toLowerCase());
+				// input.setAttribute("placeholder", dimensions[i]);
 				input.setAttribute("class", "square__forms_input--2camv square__forms_border--3w5GS input-group__input");
 
 				input.onkeyup = this.calc;
 			
 
-			// this.form.appendChild(label);
+			wrapper.appendChild(label);
 			wrapper.appendChild(input);
 			this.form.appendChild(wrapper);
 		}
+
+		var wrapper = document.createElement("div");
+			wrapper.setAttribute("class", "input-group col col-6  offset-3");
 
 		var label = document.createElement("label");
 			label.setAttribute("class", "field_name");
@@ -47,8 +56,9 @@ VolumeCalc = {
 			input.setAttribute("name", "vol");
 			input.setAttribute("disabled", "disabled");
 		
-		this.form.appendChild(label);
-		this.form.appendChild(input);
+		wrapper.appendChild(label);
+		wrapper.appendChild(input);
+		this.form.appendChild(wrapper);
 
 	},
 	calc: function() {
@@ -65,46 +75,64 @@ VolumeCalc = {
 
 	  var v = Math.round( v * 2 ) / 2 ;
 
-	  if (v == 0) v = "please enter width, depth and length"
-
 	  this.form.vol.value = v;
 	},
-	buildContainers: function(){
-			this.containers = document.createElement("div");
-			this.containers.setAttribute("class", "w-block");
+	buildFormAndContainers: function(){
 
-			// container content-align--center
-			// 	w-container row
-			// 		w-cell col
-			// 			w-container row
-			// 				w-cell col col-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3
-			// 					w-container col
-			// 						w-cell row
-			// 							form
+			this.buildForm();
 
+			var divClasses = [
+				'w-block',
+					'container content-align--center',
+						'w-container row',
+							'w-cell col',
+								'w-container row',
+									'w-cell col col-10 offset-1',
+										'w-container col',
+											'w-cell row container-volcalc'
+				]
 
-			var tpl = "<div class=''>";
-			wrapper.setAttribute("class", "container content-align--center");
-			wrapper.appendChild(this.form);
+			var outerDiv = null;	
+			for (var i = divClasses.length - 1; i >= 0; i--) {
+				var currentDiv = document.createElement("div");
+					currentDiv.setAttribute("class", divClasses[i]);
 
+                 if (i == divClasses.length - 1) {
+                 	currentDiv.innerHTML =this.opening;
+                 	currentDiv.appendChild(this.form)
+             	} else {
+             		currentDiv.appendChild(outerDiv)
+             	};
+				 outerDiv = currentDiv;  
+			}
+			this.formAndContainers = outerDiv;
+	},
+	buildStyles: function(){
+		var rules  = '.container-volcalc h1, .container-volcalc p {width: 100%; margin-bottom: 1.75em; text-align: center}';
+			rules += '.container-volcalc h1 {font-size: 2em; margin-bottom: .5em;}';
 
-			wrapper = wrapper.appendChild(this.form)
+			rules += '.container-volcalc form {width: 100%}';
+			rules += '.container-volcalc .input-group {width: 100%; text-align:center; margin-bottom: 1.75em}';
+			rules += '.container-volcalc label {margin-bottom: 0.75em; display: block; font-size: 1.5em; font-weight: 700}'
+			rules += '.container-volcalc input {width: 100px; text-align:center; padding: 14px; margin-bottom: 0.5em;}';
+			rules += '.container-volcalc input.field_total {font-weight: 700; font-size: 1.5em; color: #333;}';
+
+		this.styles = rules;
 	},
 	init: function(){
 
 		if( this.isPDP() ) {
-			this.buildForm();
-			this.buildContainers();
-			
-
+			this.buildStyles();
+			this.buildFormAndContainers();
+			var styleTag = document.createElement('style');
+			styleTag.textContent = this.styles;
+			document.head.append(styleTag);
 
 			var footer = document.querySelector('[data-block-purpose^="footer"]')
-			footer.prepend(this.containers);	
+			footer.prepend(this.formAndContainers);
 		}
 
 	}
 }
 
 VolumeCalc.init();
-
-window.console && console.log('Test Message');
