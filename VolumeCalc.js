@@ -136,4 +136,7 @@ VolumeCalc = {
 	}
 }
 
-VolumeCalc.init();
+window.onload = function() {
+   VolumeCalc.init();
+}; 
+
