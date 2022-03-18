@@ -128,6 +128,8 @@ VolumeCalc = {
 		this.styles = rules;
 	},
 	init: function(){
+		
+
 		console.log('init');
 
 		//janky sniffing for app elements to load
@@ -151,12 +153,8 @@ VolumeCalc = {
 
 			if (counter >= 20) clearInterval(checkExist);
 
-		}, 100);
+		}.bind(this), 100);
 
-
-		if( this.isPDP() ) {
-
-		}
 
 	}
 }
