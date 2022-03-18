@@ -6,6 +6,14 @@ VolumeCalc = {
 		var NodeListLength = document.querySelectorAll('[data-block-purpose^="product-detail"]').length;
 		return Boolean(NodeListLength);
 	},
+	hasFooter: function(){ 
+		var NodeListLength = document.querySelector('[data-block-purpose^="footer"]').length;
+		return Boolean(NodeListLength);
+	},
+	isAllowed: function(){ 
+		//future blacklist here
+		return true;
+	},
 	opening: "<h1>Construction Materials Calculator</h1><p>This calculator will round up in 1/2 cubic yard increments:</p>",
 	buildForm: function(){
 		this.form = document.createElement("form");
@@ -121,20 +129,39 @@ VolumeCalc = {
 	},
 	init: function(){
 		console.log('init');
-		//if( this.isPDP() ) {
-			console.log('isPDP');
-			this.buildStyles();
-			this.buildFormAndContainers();
-			var styleTag = document.createElement('style');
-			styleTag.textContent = this.styles;
-			document.head.append(styleTag);
 
-			var footer = document.querySelector('[data-block-purpose^="footer"]')
-			footer.prepend(this.formAndContainers);
-		//}
+		//janky sniffing for app elements to load
+		var counter = 0;
+		var checkExist = setInterval(function() {
+			if  ( 	this.isPDP() && 
+					this.hasFooter && 
+					this.isAllowed() 
+				) {
+					console.log('lets go');
+					this.buildStyles();
+					this.buildFormAndContainers();
+					var styleTag = document.createElement('style');
+					styleTag.textContent = this.styles;
+					document.head.append(styleTag);
+
+					var footer = document.querySelector('[data-block-purpose^="footer"]')
+					footer.prepend(this.formAndContainers);
+					clearInterval(checkExist);
+				}
+
+			if (counter >= 20) clearInterval(checkExist);
+
+		}, 100);
+
+
+		if( this.isPDP() ) {
+
+		}
 
 	}
 }
+
+
 
    VolumeCalc.init();
 
