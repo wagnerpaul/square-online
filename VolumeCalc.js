@@ -129,17 +129,17 @@ VolumeCalc = {
 	},
 	init: function(){
 		
-
-		console.log('init');
+		//always clear any previous setInterval function before starting a new one
+		if (this.checkExist) clearInterval(this.checkExist);
+		
 
 		//janky sniffing for app elements to load
 		var counter = 0;
-		var checkExist = setInterval(function() {
+		this.checkExist  = setInterval(function() {
 			if  ( 	this.isPDP() && 
 					this.hasFooter && 
 					this.isAllowed() 
 				) {
-					console.log('lets go');
 					this.buildStyles();
 					this.buildFormAndContainers();
 					var styleTag = document.createElement('style');
@@ -148,21 +148,44 @@ VolumeCalc = {
 
 					var footer = document.querySelector('[data-block-purpose^="footer"]')
 					footer.prepend(this.formAndContainers);
-					clearInterval(checkExist);
+					clearInterval(this.checkExist);
 				}
 
-			if (counter >= 20) clearInterval(checkExist);
+			if (counter >= 20) clearInterval(this.checkExist);
 
 		}.bind(this), 100);
 
+			
+
+	},
+	bind: function() {
+
+		var self = this;
+		var lastUrl = location.href; 
+		new MutationObserver( function(){
+		  var url = location.href;
+		  if (url !== lastUrl) {
+		    lastUrl = url;
+		    onUrlChange();
+		  }
+		}).observe(document, {subtree: true, childList: true});
+		 
+		 
+		function onUrlChange() {
+		  self.init();
+		}
 
 	}
+
+
+
+
 }
 
 
-
-   VolumeCalc.init();
-
-
+//kick off init on very first page load
+VolumeCalc.init();
+//only bind once
+VolumeCalc.bind();
 
 
