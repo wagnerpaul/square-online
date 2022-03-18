@@ -106,3 +106,5 @@ VolumeCalc = {
 }
 
 VolumeCalc.init();
+
+window.console && console.log('Test Message');
