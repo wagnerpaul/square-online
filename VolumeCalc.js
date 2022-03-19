@@ -194,4 +194,4 @@ VolumeCalc = {
 
 
 //kick off init on very first page load
-VolumeCalc.init();
+// VolumeCalc.init();
