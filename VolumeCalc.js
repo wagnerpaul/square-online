@@ -151,7 +151,7 @@ VolumeCalc = {
 					clearInterval(this.checkExist);
 				}
 
-			if (counter >= 20) clearInterval(this.checkExist); delete this.checkExist;
+			if (counter >= 20) clearInterval(this.checkExist);
 
 		}.bind(this), 100);
 
@@ -194,4 +194,4 @@ VolumeCalc = {
 
 
 //kick off init on very first page load
-// VolumeCalc.init();
+VolumeCalc.init();
