@@ -41,6 +41,8 @@ VolumeCalc = {
 				input.setAttribute("type", "text");
 				input.setAttribute("name", dimensions[i].name.toLowerCase());
 				input.setAttribute("aria-label", dimensions[i].name.toLowerCase());
+				input.setAttribute("inputmode", "numeric"; //hack for android numeric keyboad
+				input.setAttribute("pattern", "[0-9]*"; //hack for ios numeric keyboad
 				// input.setAttribute("placeholder", dimensions[i]);
 				input.setAttribute("class", "square__forms_input--2camv square__forms_border--3w5GS input-group__input");
 
