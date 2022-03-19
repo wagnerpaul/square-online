@@ -44,7 +44,7 @@ VolumeCalc = {
 				// input.setAttribute("placeholder", dimensions[i]);
 				input.setAttribute("class", "square__forms_input--2camv square__forms_border--3w5GS input-group__input");
 
-				input.onkeyup = this.calc;
+				input.oninput = this.calc;
 			
 
 			wrapper.appendChild(label);
