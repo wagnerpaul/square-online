@@ -115,19 +115,22 @@ VolumeCalc = {
 			}
 			this.formAndContainers = outerDiv;
 	},
-	buildStyles: function(){
+	injectStyles: function(){
+		var styleTag = document.createElement('style');
 		var rules  = '.container-volcalc h1, .container-volcalc p {width: 100%; margin-bottom: 1.75em; text-align: center}';
 			rules += '.container-volcalc h1 {font-size: 2em; margin-bottom: .5em;}';
-
 			rules += '.container-volcalc form {width: 100%}';
 			rules += '.container-volcalc .input-group {width: 100%; text-align:center; margin-bottom: 1.75em}';
 			rules += '.container-volcalc label {margin-bottom: 0.75em; display: block; font-size: 1.5em; font-weight: 700}'
 			rules += '.container-volcalc input {width: 100px; text-align:center; padding: 14px; margin-bottom: 0.5em;}';
 			rules += '.container-volcalc input.field_total {font-weight: 700; font-size: 1.5em; color: #333;}';
 
-		this.styles = rules;
+
+		styleTag.textContent = rules;
+		document.head.append(styleTag);
 	},
-	init: function(){
+	
+	injectFormAndContainers: function(){
 		
 		//always clear any previous setInterval function before starting a new one
 		if (this.checkExist) clearInterval(this.checkExist);
@@ -140,25 +143,22 @@ VolumeCalc = {
 					this.hasFooter && 
 					this.isAllowed() 
 				) {
-					this.buildStyles();
+					
 					this.buildFormAndContainers();
-					var styleTag = document.createElement('style');
-					styleTag.textContent = this.styles;
-					document.head.append(styleTag);
 
 					var footer = document.querySelector('[data-block-purpose^="footer"]')
 					footer.prepend(this.formAndContainers);
 					clearInterval(this.checkExist);
 				}
 
-			if (counter >= 20) clearInterval(this.checkExist);
+			if (counter >= 20) clearInterval(this.checkExist); delete this.checkExist;
 
 		}.bind(this), 100);
 
 			
 
 	},
-	bind: function() {
+	bindUrlChanges: function() {
 
 		var self = this;
 		var lastUrl = location.href; 
@@ -172,8 +172,18 @@ VolumeCalc = {
 		 
 		 
 		function onUrlChange() {
-		  self.init();
+		  self.injectFormAndContainers();
 		}
+
+	},
+	init: function(){
+		//only bind url changes and inject styles once
+		VolumeCalc.injectStyles();
+		VolumeCalc.bindUrlChanges();
+		
+
+		//kick off init on very first page load
+		VolumeCalc.injectFormAndContainers();
 
 	}
 
@@ -185,7 +195,3 @@ VolumeCalc = {
 
 //kick off init on very first page load
 VolumeCalc.init();
-//only bind once
-VolumeCalc.bind();
-
-
