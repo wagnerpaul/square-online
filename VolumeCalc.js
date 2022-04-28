@@ -1,3 +1,8 @@
+/*
+Cool Example
+http://nwlandscapesupply.com/products/cedar-play-chips/
+ */
+
 var VolumeCalc = VolumeCalc || {};
 
 VolumeCalc = {
@@ -14,7 +19,11 @@ VolumeCalc = {
 		//future blacklist here
 		return true;
 	},
-	opening: "<h1>Construction Materials Calculator</h1><p>This calculator will round up in 1/2 cubic yard increments:</p>",
+	alreadyExistsInDOM: function(){
+		var exists = document.getElementsByClassName("container-volcalc");
+		return Boolean(exists.length);
+	},
+	opening: "<h1>Construction Materials Calculator</h1><p>With this calculator you can quickly determine how much mulch, stone, or soil you will need for your project.</p>",
 	buildForm: function(){
 		this.form = document.createElement("form");
 		this.form.setAttribute("name", "volcalc");
@@ -83,7 +92,11 @@ VolumeCalc = {
 
 	  var v = l * w * d;
 
-	  var v = Math.round( v * 2 ) / 2 ;
+	  /**
+	   * round to two decimal places
+	   * hat tip: https://www.delftstack.com/howto/javascript/javascript-round-to-2-decimal-places/
+	   */
+	  var v = +(Math.round(v + "e+2")  + "e-2")
 
 	  this.form.vol.value = v;
 	},
@@ -118,8 +131,10 @@ VolumeCalc = {
 			this.formAndContainers = outerDiv;
 	},
 	injectStyles: function(){
+		//console.log('injectStyles');
 		var styleTag = document.createElement('style');
-		var rules  = '.container-volcalc h1, .container-volcalc p {width: 100%; margin-bottom: 1.75em; text-align: center}';
+		var rules  = '.container-volcalc { max-width: 600px; margin: 3em auto 0;}';
+			rules += '.container-volcalc h1, .container-volcalc p {width: 100%; margin-bottom: 1.75em; text-align: center}';
 			rules += '.container-volcalc h1 {font-size: 2em; margin-bottom: .5em;}';
 			rules += '.container-volcalc form {width: 100%}';
 			rules += '.container-volcalc .input-group {width: 100%; text-align:center; margin-bottom: 1.75em}';
@@ -133,14 +148,29 @@ VolumeCalc = {
 	},
 	
 	injectFormAndContainers: function(){
-		
+		//console.log('injectFormAndContainers');
+		//bail if it already exists
+		if (this.alreadyExistsInDOM()) return;
+	
 		//always clear any previous setInterval function before starting a new one
-		if (this.checkExist) clearInterval(this.checkExist);
+		if (this.attemptInterval) {
+			//console.log('pre clearing')
+			clearInterval(this.attemptInterval);
+		}
 		
 
 		//janky sniffing for app elements to load
-		var counter = 0;
-		this.checkExist  = setInterval(function() {
+		this.counter = 0;
+		this.attemptInterval  = setInterval(function() {
+			//console.log(this.counter);
+			
+			if (this.alreadyExistsInDOM()) {
+				//console.log('in dom');
+				clearInterval(this.attemptInterval);
+				return;
+			}
+			//console.log('not in dom');
+
 			if  ( 	this.isPDP() && 
 					this.hasFooter && 
 					this.isAllowed() 
@@ -150,10 +180,16 @@ VolumeCalc = {
 
 					var footer = document.querySelector('[data-block-purpose^="footer"]')
 					footer.prepend(this.formAndContainers);
-					clearInterval(this.checkExist);
-				}
+					//console.log('clearing attempt');
+					clearInterval(this.attemptInterval);
+			} 
 
-			if (counter >= 20) clearInterval(this.checkExist);
+			if (this.counter >= 20) {
+				//console.log('clearing attempt failsafe');
+				clearInterval(this.attemptInterval);
+			}
+
+			this.counter = this.counter + 1;
 
 		}.bind(this), 100);
 
@@ -161,7 +197,7 @@ VolumeCalc = {
 
 	},
 	bindUrlChanges: function() {
-
+		//console.log('bindUrlChanges');
 		var self = this;
 		var lastUrl = location.href; 
 		new MutationObserver( function(){
@@ -174,11 +210,13 @@ VolumeCalc = {
 		 
 		 
 		function onUrlChange() {
+			
 		  self.injectFormAndContainers();
 		}
 
 	},
 	init: function(){
+		//console.log('init');
 		//only bind url changes and inject styles once
 		VolumeCalc.injectStyles();
 		VolumeCalc.bindUrlChanges();
@@ -194,6 +232,6 @@ VolumeCalc = {
 
 }
 
-
+//console.log('kickoff');
 //kick off init on very first page load
 VolumeCalc.init();
