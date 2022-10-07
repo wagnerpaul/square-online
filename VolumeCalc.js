@@ -16,8 +16,16 @@ VolumeCalc = {
 		return Boolean(NodeListLength);
 	},
 	isAllowed: function(){ 
-		//future blacklist here
-		return true;
+		//start by blocking everything
+		//lets whitelist the page only if the product pricing is in yards
+		var WhiteListed = false;
+		var Nodes = document.querySelectorAll('.product__price');
+		Nodes.forEach( Node => {
+		    	if (Node.innerText.includes('/ yd')) {
+		    		WhiteListed = true;
+		    	};
+		});
+		return WhiteListed;
 	},
 	alreadyExistsInDOM: function(){
 		var exists = document.getElementsByClassName("container-volcalc");
