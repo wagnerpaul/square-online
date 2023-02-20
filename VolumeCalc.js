@@ -11,6 +11,11 @@ VolumeCalc = {
 		var NodeListLength = document.querySelectorAll('[data-block-purpose^="product-detail"]').length;
 		return Boolean(NodeListLength);
 	},
+	isStandalonePage: function(){
+		if (t = document.querySelectorAll('head title')[0] ) 
+		var result = t.innerText.includes('Material Calculator');
+		return Boolean(result);
+	},
 	hasFooter: function(){ 
 		var NodeListLength = document.querySelector('[data-block-purpose^="footer"]').length;
 		return Boolean(NodeListLength);
@@ -191,9 +196,9 @@ VolumeCalc = {
 			}
 			//console.log('not in dom');
 
-			if  ( 	this.isPDP() && 
-					this.hasFooter && 
-					this.isAllowed() 
+			if  ( 	this.hasFooter && 
+					( this.isPDP() && this.isAllowed() ) ||
+					( this.isStandalonePage() )
 				) {
 					
 					this.buildFormAndContainers();
