@@ -88,6 +88,17 @@ VolumeCalc = {
 		this.form.appendChild(wrapper);
 
 	},
+	buildLink: function(){
+		var self = this;
+		var l = document.createElement("a");
+		l.setAttribute("class", "link-volcalc");
+		l.innerHTML = "how much do I need?";
+		l.onclick = function(){
+			self.formAndContainers.scrollIntoView({behavior: "smooth"})
+			return false;
+		};
+		this.link = l;
+	},
 	calc: function() {
 	  //Hat tip: https://codepen.io/dwill/pen/WqwGeG
 	  var l = this.form.length.value; //in feet
@@ -149,6 +160,7 @@ VolumeCalc = {
 			rules += '.container-volcalc label {margin-bottom: 0.75em; display: block; font-size: 1.5em; font-weight: 700}'
 			rules += '.container-volcalc input {width: 100px; text-align:center; padding: 14px; margin-bottom: 0.5em;}';
 			rules += '.container-volcalc input.field_total {font-weight: 700; font-size: 1.5em; color: #333; opacity: 1;}';
+			rules += '.link-volcalc {font-size: .8em; color: #888; text-decoration: underline;}'
 
 
 		styleTag.textContent = rules;
@@ -188,6 +200,12 @@ VolumeCalc = {
 
 					var footer = document.querySelector('[data-block-purpose^="footer"]')
 					footer.prepend(this.formAndContainers);
+					
+					//add a link
+					this.buildLink();
+					if (price_container = document.querySelectorAll('.product__price')[0] ) 
+						price_container.append(this.link);
+					
 					//console.log('clearing attempt');
 					clearInterval(this.attemptInterval);
 			} 
