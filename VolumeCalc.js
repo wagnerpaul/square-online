@@ -165,7 +165,7 @@ VolumeCalc = {
 			rules += '.container-volcalc label {margin-bottom: 0.75em; display: block; font-size: 1.5em; font-weight: 700}'
 			rules += '.container-volcalc input {width: 100px; text-align:center; padding: 14px; margin-bottom: 0.5em;}';
 			rules += '.container-volcalc input.field_total {font-weight: 700; font-size: 1.5em; color: #333; opacity: 1;}';
-			rules += '.link-volcalc {font-size: .8em; color: #888; text-decoration: underline;}'
+			rules += '.link-volcalc {font-size: .8em; color: #888 !important; text-decoration: underline;}'
 
 
 		styleTag.textContent = rules;
