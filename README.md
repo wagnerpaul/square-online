@@ -25,3 +25,6 @@ This is likely to work because of a few things:
 	- items with one variant don't have a select
 	- may need to check to see if one variant only exists and update selection and remove options all together
 	- deal killer is price range is shown on category page and pdp that INCLUDES disabled items
+	- create localtunnel server for personal use https://hub.docker.com/r/defunctzombie/localtunnel-server
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/wagnerpaul/square-online@v1.5.0/VolumeCalc.js"></script>
