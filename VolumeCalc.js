@@ -36,7 +36,7 @@ VolumeCalc = {
 		var exists = document.getElementsByClassName("container-volcalc");
 		return Boolean(exists.length);
 	},
-	opening: "<h1>Construction Materials Calculator</h1><p>With this calculator you can quickly determine how much mulch, stone, or soil you will need for your project.</p>",
+	opening: "<h1>Construction Materials Calculator</h1><p>With this calculator you can quickly determine how much mulch, stone, or soil you will need for your project.</p>",
 	buildForm: function(){
 		this.form = document.createElement("form");
 		this.form.setAttribute("name", "volcalc");
